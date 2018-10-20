@@ -11,4 +11,5 @@ module.exports = (app) => {
     //[*]Routes Configuration
     let trackRouter = require('../routes/tracks.js');
     app.use('/tracks', trackRouter);
+
 };
