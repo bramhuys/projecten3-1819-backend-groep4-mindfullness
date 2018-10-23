@@ -7,30 +7,21 @@ const sql = require('mssql');
 
 router.get('/', (req, res) => {
 
-    sql.connect(sqlconfig, function (err) {
+    // create Request object
+    var request = new sql.Request();
+
+    // query to the database and get the records
+    request.query('select * from Oefening', function (err, recordset) {
 
         if (err) {
             console.log(err.message);
             res.send(err.message);
         }
 
-        // create Request object
-        var request = new sql.Request();
+        // send records as a response
+        res.send(recordset);
 
-        // query to the database and get the records
-        request.query('select * from Tracks', function (err, recordset) {
-
-            if (err) {
-                console.log(err.message);
-                res.send(err.message);
-            }
-
-            // send records as a response
-            res.send(recordset);
-
-        });
     });
-
 });
 
 //Get track
