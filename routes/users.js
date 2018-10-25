@@ -19,7 +19,7 @@ router.get('/', (req, res) => {
     }
 
     // send records as a response
-    res.send(recordset);
+    res.send(recordset.recordset[0]);
 
   });
 
