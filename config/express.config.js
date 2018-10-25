@@ -22,5 +22,7 @@ module.exports = (app) => {
             throw err;
     });
 
+    app.get('/favicon.ico', (req, res) => res.status(204));
+
     module.exports = connection;
 };
