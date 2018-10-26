@@ -1,15 +1,17 @@
 "use strict";
 
 const logger = require('morgan');
-const busboybodyparser = require('busboy-body-parser');
 const config = require('../config/config');
 const sqlconfig = config.dev.sqlconfig;
 const sql = require('mssql');
+const express = require('express');
+const formidable = require('express-formidable');
 
 module.exports = (app) => {
+
     app.use(logger('dev'));
 
-    app.use(busboybodyparser({ limit: '100mb' }));
+    app.use(formidable());
 
     //[*]Routes Configuration
     let exerciseRouter = require('../routes/exercises.js');
