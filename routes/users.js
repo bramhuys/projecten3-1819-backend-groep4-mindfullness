@@ -26,12 +26,14 @@ router.get('/', (req, res) => {
 });
 
 router.post('/register', (req, res) => {
-
+  
+  
   // create Request object
   var request = new sql.Request();
-  
-  request.input('email', sql.NVarChar, req.body.email);
-  request.input('token', sql.NVarChar, req.body.token);
+
+  var fields = req.fields;
+  request.input('email', sql.NVarChar, fields.email);
+  request.input('token', sql.NVarChar, fields.token);
 
   // query to the database and get the records
   request.query('INSERT INTO [User] VALUES (@email,@token)', function (err, recordset) {
