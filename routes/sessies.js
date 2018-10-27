@@ -5,14 +5,14 @@ const config = require('../config/config');
 const sqlconfig = config.dev.sqlconfig;
 const sql = require('mssql');
 
-//Get all oefeningen
+//Get all sessies
 router.get('/', (req, res) => {
 
     // create Request object
     var request = new sql.Request();
 
     // query to the database and get the records
-    request.query('select * from Oefening', function (err, recordset) {
+    request.query('select * from Sessie s', function (err, recordset) {
 
         if (err) {
             console.log(err.message);
@@ -21,11 +21,10 @@ router.get('/', (req, res) => {
 
         // send records as a response
         res.send(recordset.recordset);
-
     });
 });
 
-//Get oefeningen with sessieId
+//Get sessie with sessieId
 router.get('/:sessieId', (req, res) => {
 
     // create Request object
@@ -35,7 +34,7 @@ router.get('/:sessieId', (req, res) => {
     request.input('sessieId', sql.Int, fields.sessieId);
 
     // query to the database and get the records
-    request.query('select * from Oefening WHERE sessieId = @sessieId', function (err, recordset) {
+    request.query('select * from Sessie WHERE sessieId = @sessieId', function (err, recordset) {
 
         if (err) {
             console.log(err.message);
