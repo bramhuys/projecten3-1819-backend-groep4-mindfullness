@@ -29,7 +29,7 @@ router.get('/:sessieId', (req, res) => {
 
     // create Request object
     var request = new sql.Request();
-    
+
     var fields = req.params;
     request.input('sessieId', sql.Int, fields.sessieId);
 
@@ -47,22 +47,55 @@ router.get('/:sessieId', (req, res) => {
     });
 });
 
-//Get track
-router.get('/:trackid', (req, res) => {
-    let trackid = req.params.trackid;
-
-});
-
-//Upload track
+//Sessie toevoegen
 router.post('/', (req, res) => {
-    let part = req.files.file;
+
+    // create Request object
+    var request = new sql.Request();
+
+    var fields = req.fields;
+    request.input('naam', sql.NVarChar, fields.naam);
+    request.input('beschrijving', sql.NVarChar, fields.beschrijving);
+
+    // query to the database and get the records
+    request.query('INSERT INTO [Sessie] VALUES (@naam,@beschrijving)', function (err, recordset) {
+
+        if (err) {
+            console.log(err.message);
+            res.send(err.message);
+        }
+
+        // send records as a response
+        res.send(recordset);
+
+    });
 
 });
 
-//Remove track
-router.delete('/', (req, res) => {
+//Sessie aanpassen
+router.put('/', (req, res) => {
+
+    // create Request object
+    var request = new sql.Request();
+
+    var fields = req.fields;
+    request.input('naam', sql.NVarChar, fields.naam);
+    request.input('beschrijving', sql.NVarChar, fields.beschrijving);
+    request.input('sessieId', sql.Int, fields.sessieId);
+
+    // query to the database and get the records
+    request.query('UPDATE [Sessie] SET naam = @naam, beschrijving = @beschrijving WHERE sessieId = @sessieId', function (err, recordset) {
+
+        if (err) {
+            console.log(err.message);
+            res.send(err.message);
+        }
+
+        // send records as a response
+        res.send(recordset);
+
+    });
 
 });
-
 
 module.exports = router;
