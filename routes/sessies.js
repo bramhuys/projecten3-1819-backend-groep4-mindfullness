@@ -53,7 +53,7 @@ router.post('/', (req, res) => {
     // create Request object
     var request = new sql.Request();
 
-    var fields = req.fields;
+    var fields = req.body;
     request.input('naam', sql.NVarChar, fields.naam);
     request.input('beschrijving', sql.NVarChar, fields.beschrijving);
 
@@ -78,7 +78,7 @@ router.put('/', (req, res) => {
     // create Request object
     var request = new sql.Request();
 
-    var fields = req.fields;
+    var fields = req.body;
     request.input('naam', sql.NVarChar, fields.naam);
     request.input('beschrijving', sql.NVarChar, fields.beschrijving);
     request.input('sessieId', sql.Int, fields.sessieId);
