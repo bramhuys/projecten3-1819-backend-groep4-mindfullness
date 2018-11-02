@@ -5,17 +5,17 @@ const config = require('../config/config');
 const sqlconfig = config.dev.sqlconfig;
 const sql = require('mssql');
 const express = require('express');
-const formidable = require('express-formidable');
 const bodyParser = require('body-parser')
 const cors = require('cors');
+const multer = require('multer');
 
 module.exports = (app) => {
 
     app.use(logger('dev'));
-
+    
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }));
-    app.use(formidable());
+    //app.use(formidable());
     app.use(cors({credentials: true, origin: true}));
 
     //[*]Routes Configuration

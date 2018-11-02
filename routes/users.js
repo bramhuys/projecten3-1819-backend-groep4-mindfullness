@@ -31,7 +31,7 @@ router.post('/register', (req, res) => {
   // create Request object
   var request = new sql.Request();
 
-  var fields = req.fields;
+  var fields = req.body;
   request.input('email', sql.NVarChar, fields.email);
   request.input('token', sql.NVarChar, fields.token);
   request.input('voornaam', sql.NVarChar, fields.voornaam);
