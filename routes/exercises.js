@@ -62,15 +62,18 @@ router.post('/', upload.single('file'), (req, res) => {
 
     // create Request object
     var request = new sql.Request();
-    console.log(req.body)
+
     var fields = req.body;
     request.input('sessieId', sql.Int, fields.sessieId);
     request.input('naam', sql.NVarChar, fields.naam);
     request.input('beschrijving', sql.NVarChar, fields.beschrijving);
-    request.input('path', sql.NVarChar, req.file.filename);
+    request.input('fileName', sql.NVarChar, req.file.filename);
+    request.input('fileMimetype', sql.NVarChar, req.file.mimetype);
+    request.input('fileOriginalName', sql.NVarChar, req.file.originalname);
+    request.input('fileSize', sql.BigInt, req.file.size);
 
     // query to the database and insert the recordss
-    request.query('INSERT INTO [Oefening] VALUES (@sessieId,@naam,@beschrijving,@path)', function (err, recordset) {
+    request.query('INSERT INTO [Oefening] VALUES (@sessieId,@naam,@beschrijving,@fileName,@fileMimetype,@fileOriginalName,@fileSize)', function (err, recordset) {
 
         if (err) {
             console.log(err.message);
@@ -82,12 +85,52 @@ router.post('/', upload.single('file'), (req, res) => {
 
     });
 
-    // res.send(req.file);
-    // res.send({message: "upload success"});
 });
 
 //Remove track
-router.delete('/', (req, res) => {
+router.delete('/:oefeningId', (req, res) => {
+
+    // create Request object
+    var request = new sql.Request();
+
+    var fields = req.params;
+    request.input('oefeningId', sql.Int, fields.oefeningId);
+
+    // query to the database and get filename
+    request.query('select fileName from Oefening WHERE oefeningId = @oefeningId', function (err, recordset) {
+
+        if (err) {
+            console.log(err.message);
+            res.send(err.message);
+            return;
+        }
+
+        //remove audio/video file
+        fs.unlink('../uploads/' + recordset.recordset[0].fileName, function (err) {
+
+            if (err) {
+                console.log(err.message);
+            }
+            else {
+                //file removed
+                console.log('file removed: ' + recordset.recordset[0].fileName);
+            }
+
+            // query to the database and delete oefening
+            request.query('delete from Oefening WHERE oefeningId = @oefeningId', function (err, recordset) {
+
+                if (err) {
+                    console.log(err.message);
+                    res.send(err.message);
+                    return;
+                }
+
+                // send records as a response
+                res.send({message: 'success'});
+            });
+        });
+
+    });
 
 });
 
