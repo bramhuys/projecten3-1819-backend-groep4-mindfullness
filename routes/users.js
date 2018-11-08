@@ -36,7 +36,7 @@ router.post('/register', (req, res) => {
   request.input('token', sql.NVarChar, fields.token);
   request.input('voornaam', sql.NVarChar, fields.voornaam);
   request.input('achternaam', sql.NVarChar, fields.achternaam);
-  request.input('geboorteDatum', sql.NVarChar, fields.geboorteDatum);
+  request.input('geboorteDatum', sql.Date, fields.geboorteDatum);
 
   // query to the database and get the records
   request.query('INSERT INTO [User] VALUES (@email,@token,@voornaam,@achternaam,@geboorteDatum)', function (err, recordset) {
