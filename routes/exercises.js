@@ -20,6 +20,7 @@ router.get('/', (req, res) => {
         if (err) {
             console.log(err.message);
             res.send(err.message);
+            return;
         }
 
         // send records as a response
@@ -43,6 +44,7 @@ router.get('/:sessieId', (req, res) => {
         if (err) {
             console.log(err.message);
             res.send(err.message);
+            return;
         }
 
         // send records as a response
@@ -66,6 +68,7 @@ router.get('/oef/:oefeningId', (req, res) => {
         if (err) {
             console.log(err.message);
             res.send(err.message);
+            return;
         }
 
         // sends records as a response
@@ -100,6 +103,7 @@ router.post('/', upload.single('file'), (req, res) => {
         if (err) {
             console.log(err.message);
             res.send(err.message);
+            return;
         }
 
         // send records as a response
