@@ -88,6 +88,7 @@ router.post('/', upload.single('file'), (req, res) => {
     // create Request object
     var request = new sql.Request();
 
+    //Sql parameters
     var fields = req.body;
     request.input('sessieId', sql.Int, fields.sessieId);
     request.input('naam', sql.NVarChar, fields.naam);
@@ -113,8 +114,10 @@ router.post('/', upload.single('file'), (req, res) => {
 
 });
 
+//Returns the address of a file
 router.get('/files/:fileName', function (req, res, next) {
 
+    //Create stream with filepath
     var fileStream = fs.createReadStream('../uploads/' + req.params.fileName);
 
     fileStream.on('error', err => {
@@ -122,6 +125,7 @@ router.get('/files/:fileName', function (req, res, next) {
         return;
     });
 
+    //return file data
     fileStream.on('open', function () {
         fileStream.pipe(res);
     });
