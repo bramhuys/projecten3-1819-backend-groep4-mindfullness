@@ -109,6 +109,20 @@ router.post('/', upload.single('file'), (req, res) => {
 
 });
 
+router.get('/files/:fileName', function (req, res, next) {
+
+    var fileStream = fs.createReadStream('../uploads/' + req.params.fileName);
+
+    fileStream.on('error', err => {
+        res.send('file not found')
+        return;
+    });
+
+    fileStream.on('open', function () {
+        fileStream.pipe(res);
+    });
+});
+
 //Remove track
 router.delete('/:oefeningId', (req, res) => {
 
@@ -148,7 +162,7 @@ router.delete('/:oefeningId', (req, res) => {
                 }
 
                 // send records as a response
-                res.send({message: 'success'});
+                res.send({ message: 'success' });
             });
         });
 
