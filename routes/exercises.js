@@ -51,6 +51,28 @@ router.get('/:sessieId', (req, res) => {
     });
 });
 
+
+//Get oefening with oefeningId
+router.get('/oef/:oefeningId', (req, res) => {
+
+    // create Request object
+    var request = new sql.Request();
+
+    var fields = req.params;
+    request.input('oefeningId', sql.Int, fields.oefeningId);
+
+    // query to the db and get the records
+    request.query('select * from Oefening WHERE oefeningId = @oefeningId', function (err, recordset) {
+        if (err) {
+            console.log(err.message);
+            res.send(err.message);
+        }
+
+        // sends records as a response
+        res.send(recordset.recordset);
+    })
+})
+
 //Get track
 router.get('/:trackid', (req, res) => {
     let trackid = req.params.trackid;
