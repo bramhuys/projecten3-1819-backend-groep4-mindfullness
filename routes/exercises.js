@@ -153,7 +153,6 @@ router.delete('/:oefeningId', (req, res) => {
             }
             else {
                 //file removed
-                console.log('file removed: ' + recordset.recordset[0].fileName);
             }
 
             // query to the database and delete oefening
