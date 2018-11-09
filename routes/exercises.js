@@ -20,7 +20,6 @@ router.get('/', (req, res) => {
         if (err) {
             console.log(err.message);
             res.send(err.message);
-            return;
         }
 
         // send records as a response
@@ -44,7 +43,7 @@ router.get('/:sessieId', (req, res) => {
         if (err) {
             console.log(err.message);
             res.send(err.message);
-            return;
+            
         }
 
         // send records as a response
