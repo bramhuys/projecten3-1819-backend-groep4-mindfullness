@@ -5,8 +5,20 @@ const config = require('../config/config');
 const sqlconfig = config.dev.sqlconfig;
 const sql = require('mssql');
 const fs = require('fs');
+
+//Multer settings
 var multer = require('multer');
-var upload = multer({ dest: '../uploads/' })
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, '../uploads/')
+    },
+    filename: function (req, file, cb) {
+      cb(null, Date.now() + '.jpg') //Appending .jpg
+    }
+  })
+
+var upload = multer({ storage: storage })
+
 
 //Get all oefeningen
 router.get('/', (req, res) => {
