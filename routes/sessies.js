@@ -16,7 +16,7 @@ router.get('/', (req, res) => {
 
         if (err) {
             console.log(err.message);
-            res.send(err.message);
+            res.send(JSON.stringify({error: err.message}));
             return;
         }
 
@@ -39,7 +39,7 @@ router.get('/:sessieId', (req, res) => {
 
         if (err) {
             console.log(err.message);
-            res.send(err.message);
+            res.send(JSON.stringify({error: err.message}));
             return;
         }
 
@@ -64,7 +64,7 @@ router.post('/', (req, res) => {
 
         if (err) {
             console.log(err.message);
-            res.send(err.message);
+            res.send(JSON.stringify({error: err.message}));
             return;
         }
 
@@ -91,7 +91,7 @@ router.put('/', (req, res) => {
 
         if (err) {
             console.log(err.message);
-            res.send(err.message);
+            res.send(JSON.stringify({error: err.message}));
             return;
         }
 
