@@ -10,12 +10,13 @@ const fs = require('fs');
 var multer = require('multer');
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, '../uploads/')
+        cb(null, '../uploads/')
     },
     filename: function (req, file, cb) {
-      cb(null, Date.now() + '.jpg') //Appending .jpg
+        let ext = file.originalname.substring(file.originalname.lastIndexOf('.'), file.originalname.length);
+        cb(null, Date.now() + ext)
     }
-  })
+})
 
 var upload = multer({ storage: storage })
 
@@ -46,7 +47,7 @@ router.get('/:sessieId', (req, res) => {
 
     //store parameters
     var fields = req.params;
-    
+
     // create Request object
     var request = new sql.Request();
 
