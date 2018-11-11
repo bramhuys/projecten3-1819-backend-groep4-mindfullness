@@ -20,6 +20,7 @@ router.get('/', (req, res) => {
         if (err) {
             console.log(err.message);
             res.send(err.message);
+            return;
         }
 
         // send records as a response
@@ -31,10 +32,30 @@ router.get('/', (req, res) => {
 //Get oefeningen with sessieId
 router.get('/:sessieId', (req, res) => {
 
+    //store parameters
+    var fields = req.params;
+
+    //Error on missing sessieId
+    if (!fields.sessieId) {
+        res.status(400);
+        res.send(
+            JSON.stringify({ error: 'Missing sessieId parameter' })
+        );
+        return;
+    }
+
+    //Error on wrong sessieId type
+    if (typeof fields.sessieId != 'number') {
+        res.status(400);
+        res.send(
+            JSON.stringify({ error: 'SessieId must be a number' })
+        );
+        return;
+    }
+
     // create Request object
     var request = new sql.Request();
 
-    var fields = req.params;
     request.input('sessieId', sql.Int, fields.sessieId);
 
     // query to the database and get the records
@@ -43,7 +64,7 @@ router.get('/:sessieId', (req, res) => {
         if (err) {
             console.log(err.message);
             res.send(err.message);
-            
+            return;
         }
 
         // send records as a response
@@ -56,10 +77,30 @@ router.get('/:sessieId', (req, res) => {
 //Get oefening with oefeningId
 router.get('/oef/:oefeningId', (req, res) => {
 
+    //store parameters
+    var fields = req.params;
+
+    //Error on missing oefeningId
+    if (!fields.oefeningId) {
+        res.status(400);
+        res.send(
+            JSON.stringify({ error: 'Missing oefeningId parameter' })
+        );
+        return;
+    }
+
+    //Error on wrong oefeningId type
+    if (typeof fields.oefeningId != 'number') {
+        res.status(400);
+        res.send(
+            JSON.stringify({ error: 'OefeningId must be a number' })
+        );
+        return;
+    }
+
     // create Request object
     var request = new sql.Request();
 
-    var fields = req.params;
     request.input('oefeningId', sql.Int, fields.oefeningId);
 
     // query to the db and get the records
@@ -74,12 +115,6 @@ router.get('/oef/:oefeningId', (req, res) => {
         res.send(recordset.recordset);
     })
 })
-
-//Get track
-router.get('/:trackid', (req, res) => {
-    let trackid = req.params.trackid;
-
-});
 
 //Upload track
 router.post('/', upload.single('file'), (req, res) => {
@@ -102,7 +137,7 @@ router.post('/', upload.single('file'), (req, res) => {
 
         if (err) {
             console.log(err.message);
-            res.send(err.message);
+            res.send(JSON.stringify({ error: err.message }));
             return;
         }
 
@@ -144,7 +179,7 @@ router.delete('/:oefeningId', (req, res) => {
 
         if (err) {
             console.log(err.message);
-            res.send(err.message);
+            res.send(JSON.stringify({ error: err.message }));
             return;
         }
 
@@ -163,7 +198,7 @@ router.delete('/:oefeningId', (req, res) => {
 
                 if (err) {
                     console.log(err.message);
-                    res.send(err.message);
+                    res.send(JSON.stringify({ error: err.message }));
                     return;
                 }
 
