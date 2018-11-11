@@ -34,25 +34,7 @@ router.get('/:sessieId', (req, res) => {
 
     //store parameters
     var fields = req.params;
-
-    //Error on missing sessieId
-    if (!fields.sessieId) {
-        res.status(400);
-        res.send(
-            JSON.stringify({ error: 'Missing sessieId parameter' })
-        );
-        return;
-    }
-
-    //Error on wrong sessieId type
-    if (typeof fields.sessieId != 'number') {
-        res.status(400);
-        res.send(
-            JSON.stringify({ error: 'SessieId must be a number' })
-        );
-        return;
-    }
-
+    
     // create Request object
     var request = new sql.Request();
 
@@ -79,24 +61,6 @@ router.get('/oef/:oefeningId', (req, res) => {
 
     //store parameters
     var fields = req.params;
-
-    //Error on missing oefeningId
-    if (!fields.oefeningId) {
-        res.status(400);
-        res.send(
-            JSON.stringify({ error: 'Missing oefeningId parameter' })
-        );
-        return;
-    }
-
-    //Error on wrong oefeningId type
-    if (typeof fields.oefeningId != 'number') {
-        res.status(400);
-        res.send(
-            JSON.stringify({ error: 'OefeningId must be a number' })
-        );
-        return;
-    }
 
     // create Request object
     var request = new sql.Request();
