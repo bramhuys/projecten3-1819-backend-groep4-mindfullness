@@ -10,7 +10,7 @@ const fs = require('fs');
 var multer = require('multer');
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, '../uploads/')
+        cb(null, 'uploads/')
     },
     filename: function (req, file, cb) {
         let ext = file.originalname.substring(file.originalname.lastIndexOf('.'), file.originalname.length);
@@ -129,7 +129,7 @@ router.post('/', upload.single('file'), (req, res) => {
 router.get('/files/:fileName', function (req, res, next) {
 
     //Create stream with filepath
-    var fileStream = fs.createReadStream('../uploads/' + req.params.fileName);
+    var fileStream = fs.createReadStream('uploads/' + req.params.fileName);
 
     fileStream.on('error', err => {
         res.send('file not found')
@@ -161,7 +161,7 @@ router.delete('/:oefeningId', (req, res) => {
         }
 
         //remove audio/video file
-        fs.unlink('../uploads/' + recordset.recordset[0].fileName, function (err) {
+        fs.unlink('uploads/' + recordset.recordset[0].fileName, function (err) {
 
             if (err) {
                 console.log(err.message);
