@@ -125,6 +125,39 @@ router.post('/', upload.single('file'), (req, res) => {
 
 });
 
+//Upload track
+router.put('/', (req, res) => {
+    //TODO change files
+    // create Request object
+    var request = new sql.Request();
+
+    //Sql parameters
+    var fields = req.body;
+    request.input('oefeningId', sql.Int, fields.oefeningId)
+    request.input('sessieId', sql.Int, fields.sessieId);
+    request.input('naam', sql.NVarChar, fields.naam);
+    request.input('beschrijving', sql.NVarChar, fields.beschrijving);
+    // request.input('fileName', sql.NVarChar, req.file.filename);
+    // request.input('fileMimetype', sql.NVarChar, req.file.mimetype);
+    // request.input('fileOriginalName', sql.NVarChar, req.file.originalname);
+    // request.input('fileSize', sql.BigInt, req.file.size);
+    console.log(fields.oefeningId);
+    // query to the database and insert the recordss
+    request.query('UPDATE [Oefening] SET sessieId = @sessieId, naam = @naam, beschrijving = @beschrijving WHERE oefeningId = @oefeningId', function (err, recordset) {
+
+        if (err) {
+            console.log(err.message);
+            res.send(JSON.stringify({ error: err.message }));
+            return;
+        }
+
+        // send records as a response
+        res.send(recordset);
+
+    });
+
+});
+
 //Returns the address of a file
 router.get('/files/:fileName', function (req, res, next) {
 
