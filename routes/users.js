@@ -3,31 +3,76 @@ var router = express.Router();
 const config = require('../config/config');
 const sqlconfig = config.dev.sqlconfig;
 const sql = require('mssql');
+var admin = require("firebase-admin");
+
+// Get a database reference to our posts
+var db = admin.database();
+var ref = db.ref("Users");
+
 
 /* GET users listing. */
 router.get('/', (req, res) => {
 
-  // create Request object
-  var request = new sql.Request();
-
-  // query to the database and get the records
-  request.query('select * from [User]', function (err, recordset) {
-
-    if (err) {
-      console.log(err.message);
-      res.send(err.message);
-    }
-
-    // send records as a response
-    res.send(recordset.recordset);
-
+  // Attach an asynchronous callback to read the data at our posts reference
+  ref.on("value", function (snapshot) {
+    return res.send(snapshot.val())
+  }, function (errorObject) {
+    console.log("The read failed: " + errorObject.code);
+    return res.send("The read failed: " + errorObject.code)
   });
 
 });
 
+/* GET users listing. */
+router.get('/:email', (req, res) => {
+
+  var email = req.params.email;
+  
+  // Attach an asynchronous callback to read the data at our posts reference
+  ref.orderByChild('email').equalTo(email).on("value", function (snapshot) {
+    return res.send(snapshot.val())
+  }, function (errorObject) {
+    console.log("The read failed: " + errorObject.code);
+    return res.send("The read failed: " + errorObject.code)
+  });
+
+});
+
+/* PUT user details. */
+router.put('/:uid', (req, res) => {
+
+  var uid = req.params.uid;
+  var email = req.body.email;
+  var name = req.body.name;
+  var groepnr = req.body.groepnr;
+
+  //Null checks
+  if(email == undefined) { res.send({error: "email can't be null"}); return; }
+  if(name == undefined) { res.send({error: "name can't be null"}); return; }
+  if(groepnr == undefined) { res.send({error: "groepnr can't be null"}); return; }
+
+  // Attach an asynchronous callback to read the data at our posts reference
+  ref.child(uid).set({
+    'email' : email,
+    'name' : name,
+    'groepnr' : groepnr
+  }, function(error) {
+    if (error) {
+      res.send("Data could not be saved." + error);
+      return;
+    } else {
+      res.send("Data saved successfully.");
+      return;
+    }
+  });
+
+  
+
+});
+
 router.post('/register', (req, res) => {
-  
-  
+
+
   // create Request object
   var request = new sql.Request();
 
