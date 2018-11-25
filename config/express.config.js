@@ -9,8 +9,18 @@ const bodyParser = require('body-parser')
 const cors = require('cors');
 const multer = require('multer');
 const fs = require('fs');
+var admin = require("firebase-admin");
 
 module.exports = (app) => {
+
+    //firebase
+
+    var serviceAccount = require("../config/serviceAccountKey.json");
+
+    admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount),
+        databaseURL: "https://projecten3-1819-android-groep4.firebaseio.com"
+    });
 
     app.use(logger('dev'));
 

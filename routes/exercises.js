@@ -93,6 +93,56 @@ router.get('/oef/:oefeningId', (req, res) => {
     })
 })
 
+//Add feedback to oefening
+router.post('/oef/:oefeningId/feedback', (req, res) => {
+     // create Request object
+     var request = new sql.Request();
+
+     var fields = req.body;
+     request.input('oefeningId', sql.Int, req.params.oefeningId);
+     request.input('beschrijving', sql.NVarChar, fields.beschrijving);
+     request.input('score', sql.NVarChar, fields.score);
+    
+     // query to the database and get the records
+     request.query('INSERT INTO [Feedback] VALUES (@oefeningId,@beschrijving,@score)', function (err, recordset) {
+ 
+         if (err) {
+             console.log(err.message);
+             res.send(JSON.stringify({error: err.message}));
+             return;
+         }
+ 
+         // send records as a response
+         res.send(recordset);
+ 
+     });
+})
+
+
+//Get feedback with oefeningId
+router.get('/oef/:oefeningId/feedback', (req, res) => {
+
+    //store parameters
+    var fields = req.params;
+
+    // create Request object
+    var request = new sql.Request();
+
+    request.input('oefeningId', sql.Int, fields.oefeningId);
+
+    // query to the db and get the records
+    request.query('select * from Feedback WHERE oefeningId = @oefeningId', function (err, recordset) {
+        if (err) {
+            console.log(err.message);
+            res.send(err.message);
+            return;
+        }
+
+        // sends records as a response
+        res.send(recordset.recordset);
+    })
+})
+
 //Upload track
 router.post('/', upload.single('file'), (req, res) => {
 
