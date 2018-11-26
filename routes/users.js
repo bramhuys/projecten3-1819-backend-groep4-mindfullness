@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
   var u = [];
   ref.on("value", function (snapshot) {
     //format the data to an array
-    snapshot.forEach(function(data) {
+    snapshot.forEach(function (data) {
       var d = data.val()
       d.uid = data.key
       u.push(d)
@@ -33,10 +33,13 @@ router.get('/', (req, res) => {
 /* GET users listing. */
 router.get('/:uid', (req, res) => {
 
-  var uid = req.params.uid;
-  
+   var uid = req.params.uid;
+
+
   // Attach an asynchronous callback to read the data at our posts reference
   ref.child(uid).on("value", function (snapshot) {
+    res.send('dd')
+    res.send('dd')
     return res.send(snapshot.val());
   }, function (errorObject) {
     console.log("The read failed: " + errorObject.code);
@@ -54,16 +57,16 @@ router.put('/:uid', (req, res) => {
   var groepnr = req.body.groepnr;
 
   //Null checks
-  if(email == undefined) { res.send({error: "email can't be null"}); return; }
-  if(name == undefined) { res.send({error: "name can't be null"}); return; }
-  if(groepnr == undefined) { res.send({error: "groepnr can't be null"}); return; }
+  if (email == undefined) { res.send({ error: "email can't be null" }); return; }
+  if (name == undefined) { res.send({ error: "name can't be null" }); return; }
+  if (groepnr == undefined) { res.send({ error: "groepnr can't be null" }); return; }
 
   // Attach an asynchronous callback to read the data at our posts reference
   ref.child(uid).set({
-    'email' : email,
-    'name' : name,
-    'groepnr' : groepnr
-  }, function(error) {
+    'email': email,
+    'name': name,
+    'groepnr': groepnr
+  }, function (error) {
     if (error) {
       res.send("Data could not be saved." + error);
       return;
@@ -73,7 +76,7 @@ router.put('/:uid', (req, res) => {
     }
   });
 
-  
+
 
 });
 
