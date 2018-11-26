@@ -44,32 +44,20 @@ module.exports = (app) => {
 
     app.get('/favicon.ico', (req, res) => res.status(204));
 
-    //write errors to files
-    process
-        .on('unhandledRejection', (reason, p) => {
-            var d = new Date();
-            fs.writeFile("error/" + d.getDate() + '-' + d.getMonth() + '-' + d.getFullYear() + '-' + d.getHours() + '-' + d.getMinutes() + '-' + d.getSeconds() + ".txt", reason + 'Unhandled Rejection at Promise\n' + p, function (err) {
-                if (err) {
-                    return console.log(err);
-                }
-                console.log("Error exported");
-            });
-            console.error(reason, 'Unhandled Rejection at Promise', p);
-        })
-        .on('uncaughtException', err => {
-            var d = new Date();
-            fs.writeFileSync("error/" + d.getDate() + '-' + d.getMonth() + '-' + d.getFullYear() + '-' + d.getHours() + '-' + d.getMinutes() + '-' + d.getSeconds() + ".txt", 'Uncaught Exception thrown\n' + err.stack, function (err) {
-                if (err) {
-                    return console.log(err);
-                }
-                console.log("Error exported");
-            });
-            // Use your own logger here
-            console.error(err, 'Uncaught Exception thrownAAA');
-
-            // Optional: Ensure process will stop after this
-            process.exit(1);
-        });
+    require('crashreporter').configure({
+        mailEnabled: true,
+        mailTransportName: 'SMTP',
+        mailTransportConfig: {
+            service: 'Gmail',
+            auth: {
+                user: "nodemf4@gmail.com",
+                pass: "testtesttest123"
+            }
+        },
+        mailSubject: 'advanced.js crashreporter test',
+        mailFrom: 'crashreporter <nodemf4@gmail.com>',
+        mailTo: 'nodemf4@gmail.com'
+    });
 
     module.exports = connection;
 };
