@@ -31,20 +31,13 @@ router.get('/', (req, res) => {
 });
 
 /* GET users listing. */
-router.get('/:email', (req, res) => {
+router.get('/:uid', (req, res) => {
 
-  var email = req.params.email;
+  var uid = req.params.uid;
   
   // Attach an asynchronous callback to read the data at our posts reference
-  ref.orderByChild('email').equalTo(email).on("value", function (snapshot) {
-     
-    //format the data
-    var d
-    snapshot.forEach(function(data) {
-      d = data.val()
-      d.uid = data.key
-    })
-    return res.send(d)
+  ref.child(uid).on("value", function (snapshot) {
+    return res.send(snapshot.val());
   }, function (errorObject) {
     console.log("The read failed: " + errorObject.code);
     return res.send("The read failed: " + errorObject.code)
