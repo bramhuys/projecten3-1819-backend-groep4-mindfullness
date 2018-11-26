@@ -38,8 +38,6 @@ router.get('/:uid', (req, res) => {
 
   // Attach an asynchronous callback to read the data at our posts reference
   ref.child(uid).on("value", function (snapshot) {
-    res.send('dd')
-    res.send('dd')
     return res.send(snapshot.val());
   }, function (errorObject) {
     console.log("The read failed: " + errorObject.code);
