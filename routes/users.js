@@ -14,8 +14,15 @@ var ref = db.ref("Users");
 router.get('/', (req, res) => {
 
   // Attach an asynchronous callback to read the data at our posts reference
+  var u = [];
   ref.on("value", function (snapshot) {
-    return res.send(snapshot.val())
+    //format the data to an array
+    snapshot.forEach(function(data) {
+      var d = data.val()
+      d.uid = data.key
+      u.push(d)
+    })
+    return res.send(u)
   }, function (errorObject) {
     console.log("The read failed: " + errorObject.code);
     return res.send("The read failed: " + errorObject.code)
@@ -30,7 +37,14 @@ router.get('/:email', (req, res) => {
   
   // Attach an asynchronous callback to read the data at our posts reference
   ref.orderByChild('email').equalTo(email).on("value", function (snapshot) {
-    return res.send(snapshot.val())
+     
+    //format the data
+    var d
+    snapshot.forEach(function(data) {
+      d = data.val()
+      d.uid = data.key
+    })
+    return res.send(d)
   }, function (errorObject) {
     console.log("The read failed: " + errorObject.code);
     return res.send("The read failed: " + errorObject.code)
