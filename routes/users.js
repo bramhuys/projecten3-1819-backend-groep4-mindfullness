@@ -15,7 +15,7 @@ router.get('/', (req, res) => {
 
   // Attach an asynchronous callback to read the data at our posts reference
   var u = [];
-  ref.on("value", function (snapshot) {
+  ref.once("value", function (snapshot) {
     //format the data to an array
     snapshot.forEach(function (data) {
       var d = data.val()
@@ -37,7 +37,7 @@ router.get('/:uid', (req, res) => {
 
 
   // Attach an asynchronous callback to read the data at our posts reference
-  ref.child(uid).on("value", function (snapshot) {
+  ref.child(uid).once("value", function (snapshot) {
     return res.send(snapshot.val());
   }, function (errorObject) {
     console.log("The read failed: " + errorObject.code);
