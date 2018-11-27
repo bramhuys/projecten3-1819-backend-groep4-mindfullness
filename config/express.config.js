@@ -44,6 +44,10 @@ module.exports = (app) => {
 
     app.get('/favicon.ico', (req, res) => res.status(204));
 
+    //fix eproto exception https://github.com/nodejs/node/issues/19359
+    require("tls").DEFAULT_ECDH_CURVE = "auto"
+    
+    //send crash reports to mail
     require('crashreporter').configure({
         mailEnabled: true,
         mailTransportName: 'SMTP',
