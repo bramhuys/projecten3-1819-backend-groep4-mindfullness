@@ -58,9 +58,10 @@ router.post('/', (req, res) => {
     var fields = req.body;
     request.input('naam', sql.NVarChar, fields.naam);
     request.input('beschrijving', sql.NVarChar, fields.beschrijving);
+    request.input('sessieCode', sql.NVarChar, fields.sessieCode);
 
     // query to the database and get the records
-    request.query('INSERT INTO [Sessie] VALUES (@naam,@beschrijving)', function (err, recordset) {
+    request.query('INSERT INTO [Sessie] VALUES (@naam,@beschrijving,@sessieCode)', function (err, recordset) {
 
         if (err) {
             console.log(err.message);
@@ -85,9 +86,10 @@ router.put('/', (req, res) => {
     request.input('naam', sql.NVarChar, fields.naam);
     request.input('beschrijving', sql.NVarChar, fields.beschrijving);
     request.input('sessieId', sql.Int, fields.sessieId);
+    request.input('sessieCode', sql.NVarChar, fields.sessieCode);
 
     // query to the database and get the records
-    request.query('UPDATE [Sessie] SET naam = @naam, beschrijving = @beschrijving WHERE sessieId = @sessieId', function (err, recordset) {
+    request.query('UPDATE [Sessie] SET naam = @naam, beschrijving = @beschrijving, sessieCode = @sessieCode WHERE sessieId = @sessieId', function (err, recordset) {
 
         if (err) {
             console.log(err.message);
