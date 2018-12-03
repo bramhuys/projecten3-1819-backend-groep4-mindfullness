@@ -20,7 +20,6 @@ var storage = multer.diskStorage({
 
 var upload = multer({ storage: storage })
 
-
 //Get all oefeningen
 router.get('/', (req, res) => {
 
@@ -158,9 +157,10 @@ router.post('/', upload.single('file'), (req, res) => {
     request.input('fileMimetype', sql.NVarChar, req.file.mimetype);
     request.input('fileOriginalName', sql.NVarChar, req.file.originalname);
     request.input('fileSize', sql.BigInt, req.file.size);
+    request.input('groepen', sql.NVarChar, fields.groepen);
 
     // query to the database and insert the recordss
-    request.query('INSERT INTO [Oefening] VALUES (@sessieId,@naam,@beschrijving,@fileName,@fileMimetype,@fileOriginalName,@fileSize)', function (err, recordset) {
+    request.query('INSERT INTO [Oefening] VALUES (@sessieId,@naam,@beschrijving,@fileName,@fileMimetype,@fileOriginalName,@fileSize,@groepen)', function (err, recordset) {
 
         if (err) {
             console.log(err.message);
@@ -187,13 +187,14 @@ router.put('/', (req, res) => {
     request.input('sessieId', sql.Int, fields.sessieId);
     request.input('naam', sql.NVarChar, fields.naam);
     request.input('beschrijving', sql.NVarChar, fields.beschrijving);
+    request.input('groepen', sql.NVarChar, fields.groepen);
     // request.input('fileName', sql.NVarChar, req.file.filename);
     // request.input('fileMimetype', sql.NVarChar, req.file.mimetype);
     // request.input('fileOriginalName', sql.NVarChar, req.file.originalname);
     // request.input('fileSize', sql.BigInt, req.file.size);
     console.log(fields.oefeningId);
     // query to the database and insert the recordss
-    request.query('UPDATE [Oefening] SET sessieId = @sessieId, naam = @naam, beschrijving = @beschrijving WHERE oefeningId = @oefeningId', function (err, recordset) {
+    request.query('UPDATE [Oefening] SET sessieId = @sessieId, naam = @naam, beschrijving = @beschrijving, groepen = @groepen WHERE oefeningId = @oefeningId', function (err, recordset) {
 
         if (err) {
             console.log(err.message);
@@ -227,7 +228,6 @@ router.get('/files/:fileName', function (req, res, next) {
 
 //Remove track
 router.delete('/:oefeningId', (req, res) => {
-
     // create Request object
     var request = new sql.Request();
 
