@@ -53,17 +53,23 @@ router.put('/:uid', (req, res) => {
   var email = req.body.email;
   var name = req.body.name;
   var groepnr = req.body.groepnr;
+  var telnr = req.body.tel;
+  var username = req.body.username;
 
   //Null checks
   if (email == undefined) { res.send({ error: "email can't be null" }); return; }
   if (name == undefined) { res.send({ error: "name can't be null" }); return; }
   if (groepnr == undefined) { res.send({ error: "groepnr can't be null" }); return; }
+  if (telnr == undefined) { res.send({ error: "telnr can't be null" }); return; }
+  if (username == undefined) { res.send({ error: "username can't be null" }); return; }
 
   // Attach an asynchronous callback to read the data at our posts reference
   ref.child(uid).set({
     'email': email,
     'name': name,
-    'groepnr': groepnr
+    'groepnr': groepnr,
+    'telnr' : telnr,
+    'username' : username
   }, function (error) {
     if (error) {
       res.send("Data could not be saved." + error);
@@ -78,30 +84,38 @@ router.put('/:uid', (req, res) => {
 
 });
 
-router.post('/register', (req, res) => {
+router.post('/:uid', (req, res) => {
 
 
-  // create Request object
-  var request = new sql.Request();
+  var uid = req.params.uid;
+  var email = req.body.email;
+  var name = req.body.name;
+  var groepnr = req.body.groepnr;
+  var telnr = req.body.tel;
+  var username = req.body.username;
 
-  var fields = req.body;
-  request.input('email', sql.NVarChar, fields.email);
-  request.input('token', sql.NVarChar, fields.token);
-  request.input('voornaam', sql.NVarChar, fields.voornaam);
-  request.input('achternaam', sql.NVarChar, fields.achternaam);
-  request.input('geboorteDatum', sql.Date, fields.geboorteDatum);
+  //Null checks
+  if (email == undefined) { res.send({ error: "email can't be null" }); return; }
+  if (name == undefined) { res.send({ error: "name can't be null" }); return; }
+  if (groepnr == undefined) { res.send({ error: "groepnr can't be null" }); return; }
+  if (telnr == undefined) { res.send({ error: "telnr can't be null" }); return; }
+  if (username == undefined) { res.send({ error: "username can't be null" }); return; }
 
-  // query to the database and get the records
-  request.query('INSERT INTO [User] VALUES (@email,@token,@voornaam,@achternaam,@geboorteDatum)', function (err, recordset) {
-
-    if (err) {
-      console.log(err.message);
-      res.send(err.message);
+  // Attach an asynchronous callback to read the data at our posts reference
+  ref.child(uid).set({
+    'email': email,
+    'name': name,
+    'groepnr': groepnr,
+    'telnr' : telnr,
+    'username' : username
+  }, function (error) {
+    if (error) {
+      res.send("Data could not be saved." + error);
+      return;
+    } else {
+      res.send("Data saved successfully.");
+      return;
     }
-
-    // send records as a response
-    res.send(recordset);
-
   });
 
 });
