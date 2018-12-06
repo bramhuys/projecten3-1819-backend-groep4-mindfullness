@@ -54,14 +54,14 @@ router.put('/:uid', (req, res) => {
   var name = req.body.name;
   var groepnr = req.body.groepnr;
   var telnr = req.body.tel;
-  var username = req.body.username;
+  var regio = req.body.regio;
 
   //Null checks
   if (email == undefined) { res.send({ error: "email can't be null" }); return; }
   if (name == undefined) { res.send({ error: "name can't be null" }); return; }
   if (groepnr == undefined) { res.send({ error: "groepnr can't be null" }); return; }
   if (telnr == undefined) { res.send({ error: "telnr can't be null" }); return; }
-  if (username == undefined) { res.send({ error: "username can't be null" }); return; }
+  if (regio == undefined) { res.send({ error: "regio can't be null" }); return; }
 
   // Attach an asynchronous callback to read the data at our posts reference
   ref.child(uid).set({
@@ -69,7 +69,7 @@ router.put('/:uid', (req, res) => {
     'name': name,
     'groepnr': groepnr,
     'telnr' : telnr,
-    'username' : username
+    'regio' : regio
   }, function (error) {
     if (error) {
       res.send("Data could not be saved." + error);
@@ -92,14 +92,14 @@ router.post('/:uid', (req, res) => {
   var name = req.body.name;
   var groepnr = req.body.groepnr;
   var telnr = req.body.tel;
-  var username = req.body.username;
+  var regio = req.body.regio;
 
   //Null checks
   if (email == undefined) { res.send({ error: "email can't be null" }); return; }
   if (name == undefined) { res.send({ error: "name can't be null" }); return; }
   if (groepnr == undefined) { res.send({ error: "groepnr can't be null" }); return; }
   if (telnr == undefined) { res.send({ error: "telnr can't be null" }); return; }
-  if (username == undefined) { res.send({ error: "username can't be null" }); return; }
+  if (regio == undefined) { res.send({ error: "username can't be null" }); return; }
 
   // Attach an asynchronous callback to read the data at our posts reference
   ref.child(uid).set({
@@ -107,7 +107,7 @@ router.post('/:uid', (req, res) => {
     'name': name,
     'groepnr': groepnr,
     'telnr' : telnr,
-    'username' : username
+    'regio' : regio
   }, function (error) {
     if (error) {
       res.send("Data could not be saved." + error);
