@@ -85,8 +85,6 @@ router.put('/:uid', (req, res) => {
 });
 
 router.post('/:uid', (req, res) => {
-
-
   var uid = req.params.uid;
   var email = req.body.email;
   var name = req.body.name;
@@ -117,7 +115,19 @@ router.post('/:uid', (req, res) => {
       return;
     }
   });
+});
 
+router.delete('/:uid', (req, res) => {
+  var uid = req.params.uid;
+  
+  admin.auth().getUser(uid)
+  .then(function(userRecord) {
+    // See the UserRecord reference doc for the contents of userRecord.
+    console.log("Successfully fetched user data:", userRecord.toJSON());
+  })
+  .catch(function(error) {
+    console.log("Error fetching user data:", error);
+  });
 });
 
 module.exports = router;
