@@ -172,7 +172,6 @@
       var uid = req.params.uid;
 
       const admin = require('firebase-admin');
-      admin.initializeApp();
 
       exports.deleteUser = functions.firestore
         .document('users/' + uid)
