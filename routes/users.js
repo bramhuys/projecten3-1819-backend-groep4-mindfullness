@@ -57,19 +57,44 @@
       var regio = req.body.regio;
 
       //Null checks
-      if (email == undefined) { res.send({ error: "email can't be null" }); return; }
-      if (name == undefined) { res.send({ error: "name can't be null" }); return; }
-      if (groepnr == undefined) { res.send({ error: "groepnr can't be null" }); return; }
-      if (telnr == undefined) { res.send({ error: "telnr can't be null" }); return; }
-      if (regio == undefined) { res.send({ error: "regio can't be null" }); return; }
+      if (email == undefined) {
+        res.send({
+          error: "email can't be null"
+        });
+        return;
+      }
+      if (name == undefined) {
+        res.send({
+          error: "name can't be null"
+        });
+        return;
+      }
+      if (groepnr == undefined) {
+        res.send({
+          error: "groepnr can't be null"
+        });
+        return;
+      }
+      if (telnr == undefined) {
+        res.send({
+          error: "telnr can't be null"
+        });
+        return;
+      }
+      if (regio == undefined) {
+        res.send({
+          error: "regio can't be null"
+        });
+        return;
+      }
 
       // Attach an asynchronous callback to read the data at our posts reference
       ref.child(uid).set({
         'email': email,
         'name': name,
         'groepnr': groepnr,
-        'telnr' : telnr,
-        'regio' : regio
+        'telnr': telnr,
+        'regio': regio
       }, function (error) {
         if (error) {
           res.send("Data could not be saved." + error);
@@ -80,13 +105,11 @@
         }
       });
 
-    
+
 
     });
 
     router.post('/:uid', (req, res) => {
-
-
       var uid = req.params.uid;
       var email = req.body.email;
       var name = req.body.name;
@@ -95,19 +118,44 @@
       var regio = req.body.regio;
 
       //Null checks
-      if (email == undefined) { res.send({ error: "email can't be null" }); return; }
-      if (name == undefined) { res.send({ error: "name can't be null" }); return; }
-      if (groepnr == undefined) { res.send({ error: "groepnr can't be null" }); return; }
-      if (telnr == undefined) { res.send({ error: "telnr can't be null" }); return; }
-      if (regio == undefined) { res.send({ error: "username can't be null" }); return; }
+      if (email == undefined) {
+        res.send({
+          error: "email can't be null"
+        });
+        return;
+      }
+      if (name == undefined) {
+        res.send({
+          error: "name can't be null"
+        });
+        return;
+      }
+      if (groepnr == undefined) {
+        res.send({
+          error: "groepnr can't be null"
+        });
+        return;
+      }
+      if (telnr == undefined) {
+        res.send({
+          error: "telnr can't be null"
+        });
+        return;
+      }
+      if (regio == undefined) {
+        res.send({
+          error: "username can't be null"
+        });
+        return;
+      }
 
       // Attach an asynchronous callback to read the data at our posts reference
       ref.child(uid).set({
         'email': email,
         'name': name,
         'groepnr': groepnr,
-        'telnr' : telnr,
-        'regio' : regio
+        'telnr': telnr,
+        'regio': regio
       }, function (error) {
         if (error) {
           res.send("Data could not be saved." + error);
@@ -118,6 +166,16 @@
         }
       });
 
+    });
+
+    router.delete('/:uid', (req, res) => {
+      admin.auth().deleteUser(uid)
+        .then(function () {
+          console.log("Successfully deleted user");
+        })
+        .catch(function (error) {
+          console.log("Error deleting user:", error);
+        });
     });
 
     module.exports = router;
