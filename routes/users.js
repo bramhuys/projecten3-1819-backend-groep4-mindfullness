@@ -170,16 +170,14 @@
 
     router.delete('/:uid', (req, res) => {
       var uid = req.params.uid;
-
-      const admin = require('firebase-admin');
-
-      exports.deleteUser = functions.firestore
-        .document('users/' + uid)
-        .onDelete((snap, context) => {
-          return admin.auth().deleteUser(snap.id)
-            .then(() => console.log('Deleted user with ID:' + snap.id))
-            .catch((error) => console.error('There was an error while deleting user:', error));
-        });
+      
+      admin.auth().deleteUser(uid)
+      .then(function() {
+        console.log("Successfully deleted user");
+      })
+      .catch(function(error) {
+        console.log("Error deleting user:", error);
+      });
     });
 
     module.exports = router;
