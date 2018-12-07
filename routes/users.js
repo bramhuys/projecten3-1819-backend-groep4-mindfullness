@@ -169,6 +169,7 @@
     });
 
     router.delete('/:uid', (req, res) => {
+      var uid = req.params.uid;
       admin.auth().deleteUser(uid)
         .then(function () {
           console.log("Successfully deleted user");
