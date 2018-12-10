@@ -53,35 +53,40 @@
       var email = req.body.email;
       var name = req.body.name;
       var groepnr = req.body.groepnr;
-      var telnr = req.body.tel;
+      var telnr = req.body.telnr;
       var regio = req.body.regio;
 
       //Null checks
       if (email == undefined) {
+        res.status = 500
         res.send({
           error: "email can't be null"
         });
         return;
       }
       if (name == undefined) {
+        res.status = 500
         res.send({
           error: "name can't be null"
         });
         return;
       }
       if (groepnr == undefined) {
+        res.status = 500
         res.send({
           error: "groepnr can't be null"
         });
         return;
       }
       if (telnr == undefined) {
+        res.status = 500
         res.send({
           error: "telnr can't be null"
         });
         return;
       }
       if (regio == undefined) {
+        res.status = 500
         res.send({
           error: "regio can't be null"
         });
@@ -114,7 +119,7 @@
       var email = req.body.email;
       var name = req.body.name;
       var groepnr = req.body.groepnr;
-      var telnr = req.body.tel;
+      var telnr = req.body.telnr;
       var regio = req.body.regio;
 
       //Null checks
