@@ -176,6 +176,7 @@
     router.delete('/:uid', (req, res) => {
       var uid = req.params.uid;
       
+      // Remove from Authentication
       admin.auth().deleteUser(uid)
       .then(function() {
         console.log("Successfully deleted user");
@@ -183,6 +184,9 @@
       .catch(function(error) {
         console.log("Error deleting user:", error);
       });
+
+      // Remove from Realtime DB
+      ref.child(uid).remove();
     });
 
     module.exports = router;
