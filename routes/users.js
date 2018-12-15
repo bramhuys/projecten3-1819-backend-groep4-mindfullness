@@ -55,6 +55,7 @@
       var groepnr = req.body.groepnr;
       var telnr = req.body.telnr;
       var regio = req.body.regio;
+      var sessieid = req.body.sessieid;
 
       //Null checks
       if (email == undefined) {
@@ -92,6 +93,13 @@
         });
         return;
       }
+      if (sessieid == undefined) {
+        res.status = 500
+        res.send({
+          error: "sessieid can't be null"
+        });
+        return;
+      }
 
       // Attach an asynchronous callback to read the data at our posts reference
       ref.child(uid).set({
@@ -99,7 +107,8 @@
         'name': name,
         'groepnr': groepnr,
         'telnr': telnr,
-        'regio': regio
+        'regio': regio,
+        'sessieid': sessieid
       }, function (error) {
         if (error) {
           res.send("Data could not be saved." + error);
@@ -121,35 +130,48 @@
       var groepnr = req.body.groepnr;
       var telnr = req.body.telnr;
       var regio = req.body.regio;
+      var sessieid = req.body.sessieid;
 
       //Null checks
       if (email == undefined) {
+        res.status = 500
         res.send({
           error: "email can't be null"
         });
         return;
       }
       if (name == undefined) {
+        res.status = 500
         res.send({
           error: "name can't be null"
         });
         return;
       }
       if (groepnr == undefined) {
+        res.status = 500
         res.send({
           error: "groepnr can't be null"
         });
         return;
       }
       if (telnr == undefined) {
+        res.status = 500
         res.send({
           error: "telnr can't be null"
         });
         return;
       }
       if (regio == undefined) {
+        res.status = 500
         res.send({
           error: "username can't be null"
+        });
+        return;
+      }
+      if (sessieid == undefined) {
+        res.status = 500
+        res.send({
+          error: "sessieid can't be null"
         });
         return;
       }
@@ -160,7 +182,8 @@
         'name': name,
         'groepnr': groepnr,
         'telnr': telnr,
-        'regio': regio
+        'regio': regio,
+        'sessieid': sessieid
       }, function (error) {
         if (error) {
           res.send("Data could not be saved." + error);
