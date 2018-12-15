@@ -94,29 +94,52 @@ router.get('/oef/:oefeningId', (req, res) => {
 
 //Add feedback to oefening
 router.post('/oef/:oefeningId/feedback', (req, res) => {
-     // create Request object
-     var request = new sql.Request();
+    // create Request object
+    var request = new sql.Request();
 
-     var fields = req.body;
-     request.input('oefeningId', sql.Int, req.params.oefeningId);
-     request.input('beschrijving', sql.NVarChar, fields.beschrijving);
-     request.input('score', sql.NVarChar, fields.score);
-    
-     // query to the database and get the records
-     request.query('INSERT INTO [Feedback] VALUES (@oefeningId,@beschrijving,@score)', function (err, recordset) {
- 
-         if (err) {
-             console.log(err.message);
-             res.send(JSON.stringify({error: err.message}));
-             return;
-         }
- 
-         // send records as a response
-         res.send(recordset);
- 
-     });
+    var fields = req.body;
+    request.input('oefeningId', sql.Int, req.params.oefeningId);
+    request.input('beschrijving', sql.NVarChar, fields.beschrijving);
+    request.input('score', sql.NVarChar, fields.score);
+
+    // query to the database and get the records
+    request.query('INSERT INTO [Feedback] VALUES (@oefeningId,@beschrijving,@score)', function (err, recordset) {
+
+        if (err) {
+            console.log(err.message);
+            res.send(JSON.stringify({ error: err.message }));
+            return;
+        }
+
+        // send records as a response
+        res.send(recordset);
+
+    });
 })
 
+//Remove feedback from oefening
+router.delete('/oef/:oefeningId/feedback', (req, res) => {
+
+    // create Request object
+    var request = new sql.Request();
+
+    request.input('oefeningId', sql.Int, req.params.oefeningId);
+
+    // query to the database and get the records
+    request.query('DELETE FROM Feedback WHERE oefeningId = @oefeningId', function (err, recordset) {
+
+        if (err) {
+            console.log(err.message);
+            res.status = 500
+            res.send(JSON.stringify({ error: err.message }));
+            return;
+        }
+
+        // send records as a response
+        res.send(recordset);
+
+    });
+})
 
 //Get feedback with oefeningId
 router.get('/oef/:oefeningId/feedback', (req, res) => {
@@ -132,6 +155,7 @@ router.get('/oef/:oefeningId/feedback', (req, res) => {
     // query to the db and get the records
     request.query('select * from Feedback WHERE oefeningId = @oefeningId', function (err, recordset) {
         if (err) {
+            res.status = 500
             console.log(err.message);
             res.send(err.message);
             return;
@@ -163,6 +187,7 @@ router.post('/', upload.single('file'), (req, res) => {
     request.query('INSERT INTO [Oefening] VALUES (@sessieId,@naam,@beschrijving,@fileName,@fileMimetype,@fileOriginalName,@fileSize,@groepen)', function (err, recordset) {
 
         if (err) {
+            res.status = 500
             console.log(err.message);
             res.send(JSON.stringify({ error: err.message }));
             return;
@@ -197,6 +222,7 @@ router.put('/', (req, res) => {
     request.query('UPDATE [Oefening] SET sessieId = @sessieId, naam = @naam, beschrijving = @beschrijving, groepen = @groepen WHERE oefeningId = @oefeningId', function (err, recordset) {
 
         if (err) {
+            res.status = 500
             console.log(err.message);
             res.send(JSON.stringify({ error: err.message }));
             return;
@@ -216,6 +242,7 @@ router.get('/files/:fileName', function (req, res, next) {
     var fileStream = fs.createReadStream('uploads/' + req.params.fileName);
 
     fileStream.on('error', err => {
+        res.status = 500
         res.send('file not found')
         return;
     });
@@ -232,19 +259,28 @@ router.delete('/:oefeningId', (req, res) => {
     var request = new sql.Request();
 
     var fields = req.params;
+
     request.input('oefeningId', sql.Int, fields.oefeningId);
 
     // query to the database and get filename
     request.query('select fileName from Oefening WHERE oefeningId = @oefeningId', function (err, recordset) {
 
         if (err) {
+            res.status = 500
             console.log(err.message);
             res.send(JSON.stringify({ error: err.message }));
             return;
         }
 
+        //Return error if no rows were affected, meaning the oefening was not found
+        if (recordset.rowsAffected == 0) {
+            res.status = 500
+            res.send(JSON.stringify({ error: 'No oefening found with id ' + fields.oefeningId }));
+            return;
+        }
+
         //remove audio/video file
-        fs.unlink('uploads/' + recordset.recordset[0].fileName, function (err) {
+        if (recordset.recordset[0] != undefined) fs.unlink('uploads/' + recordset.recordset[0].fileName, function (err) {
 
             if (err) {
                 console.log(err.message);
@@ -252,11 +288,23 @@ router.delete('/:oefeningId', (req, res) => {
             else {
                 //file removed
             }
+        });
+
+        // query to the database and delete feedback
+        request.query('delete from Feedback WHERE oefeningId = @oefeningId', function (err, recordset) {
+
+            if (err) {
+                res.status = 500
+                console.log(err.message);
+                res.send(JSON.stringify({ error: err.message }));
+                return;
+            }
 
             // query to the database and delete oefening
             request.query('delete from Oefening WHERE oefeningId = @oefeningId', function (err, recordset) {
 
                 if (err) {
+                    res.status = 500
                     console.log(err.message);
                     res.send(JSON.stringify({ error: err.message }));
                     return;
@@ -266,7 +314,6 @@ router.delete('/:oefeningId', (req, res) => {
                 res.send({ message: 'success' });
             });
         });
-
     });
 
 });
