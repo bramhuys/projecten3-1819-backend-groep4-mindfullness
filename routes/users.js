@@ -48,11 +48,14 @@
 
     /* PUT user details. */
     router.put('/:uid', (req, res) => {
-
       var uid = req.params.uid;
       var email = req.body.email;
       var name = req.body.name;
-      var groepnr = req.body.groepnr;
+      if (!req.body.groepnr) {
+        var groepnr = "0";
+      } else {
+        var groepnr = req.body.groepnr;
+      }
       var telnr = req.body.telnr;
       var regio = req.body.regio;
       var sessieid = req.body.sessieid;
