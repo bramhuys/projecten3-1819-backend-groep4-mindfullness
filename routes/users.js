@@ -51,11 +51,7 @@
       var uid = req.params.uid;
       var email = req.body.email;
       var name = req.body.name;
-      if (!req.body.groepnr) {
-        var groepnr = "0";
-      } else {
-        var groepnr = req.body.groepnr;
-      }
+      var groepnr = req.body.groepnr;
       var telnr = req.body.telnr;
       var regio = req.body.regio;
       var sessieid = req.body.sessieid;
@@ -201,15 +197,15 @@
 
     router.delete('/:uid', (req, res) => {
       var uid = req.params.uid;
-      
+
       // Remove from Authentication
       admin.auth().deleteUser(uid)
-      .then(function() {
-        console.log("Successfully deleted user");
-      })
-      .catch(function(error) {
-        console.log("Error deleting user:", error);
-      });
+        .then(function () {
+          console.log("Successfully deleted user");
+        })
+        .catch(function (error) {
+          console.log("Error deleting user:", error);
+        });
 
       // Remove from Realtime DB
       ref.child(uid).remove();
